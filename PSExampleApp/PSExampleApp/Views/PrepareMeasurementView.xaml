@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="PSExampleApp.Forms.Views.PrepareMeasurementView"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    xmlns:viewmodels="clr-namespace:PSExampleApp.Forms.ViewModels"
+    xmlns:views="clr-namespace:PSExampleApp.Forms.Views"
+    x:DataType="viewmodels:PrepareMeasurementViewModel"
+    xmlns:local="clr-namespace:PSExampleApp.Forms.Converters"    
+    Style="{StaticResource CustomPage}">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <local:ByteArrayToImageSourceConverter x:Key="ByteArrayToImageSourceConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.BackgroundImageSource>
+        <Binding Path="BackgroundImage" Converter="{StaticResource ByteArrayToImageSourceConverter}" />
+    </ContentPage.BackgroundImageSource>
+
+    <ContentPage.Content>
+        <Grid
+            RowDefinitions="*,60,5,60,*,50,5,70"
+            ColumnDefinitions="*,3*,*">
+            <Entry
+                Grid.Column="1"
+                Grid.Row="1"
+                Placeholder="{xct:Translate SampleName}"
+                Text="{Binding SampleName}" />
+            <Editor
+                Grid.Column="1"
+                Grid.Row="3"
+                AutoSize="Disabled"
+                BackgroundColor="White"
+                HeightRequest="150"
+                MaxLength="300"
+                MinimumHeightRequest="150"
+                Placeholder="{xct:Translate Notes}"
+                Text="{Binding SampleNotes}" />
+            <Button
+                Grid.Column="1"
+                Grid.Row="5"
+                Command="{Binding ContinueCommand}"
+                Text="{xct:Translate Continue}" />
+
+            <ContentView 
+                Grid.Row="7"
+                Grid.ColumnSpan="3"
+                Grid.Column="0">
+                <views:StatusBarView />
+            </ContentView>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

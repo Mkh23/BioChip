@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="PSExampleApp.Forms.Views.SelectDeviceView"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:behaviors="clr-namespace:PSExampleApp.Forms.Behaviors"
+    xmlns:local="clr-namespace:PSExampleApp.Forms.Converters"
+    xmlns:model="clr-namespace:PalmSens.Core.Simplified.XF.Application.Models;assembly=PalmSens.Core.Simplified.XF.Application"
+    xmlns:viewmodels="clr-namespace:PSExampleApp.Forms.ViewModels"
+    xmlns:views="clr-namespace:PSExampleApp.Forms.Views"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    x:DataType="viewmodels:SelectDeviceViewModel"
+    Style="{StaticResource CustomPage}">
+
+    <ContentPage.Behaviors>
+        <behaviors:OnAppearingBehavior OnAppearingCommand="{Binding OnPageAppearingCommand}" />
+        <behaviors:OnDisappearingBehavior OnDisappearingCommand="{Binding OnPageDisappearingCommand}" />
+    </ContentPage.Behaviors>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <local:InverseBoolConverter x:Key="InverseBool" />
+            <local:NullToVisibilityConverter x:Key="nullToVisibility" />
+            <local:NullToInVisibilityConverter x:Key="nullToInvisibility" />
+            <local:ByteArrayToImageSourceConverter x:Key="ByteArrayToImageSourceConverter" />            
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.BackgroundImageSource>
+        <Binding Path="BackgroundImage" Converter="{StaticResource ByteArrayToImageSourceConverter}" />
+    </ContentPage.BackgroundImageSource>    
+    
+    <Grid>
+        <Grid.Margin>
+            <OnPlatform x:TypeArguments="Thickness">
+                <On Platform="iOS" Value="0,50,0,0" />
+            </OnPlatform>
+        </Grid.Margin>        
+        <StackLayout
+            HorizontalOptions="CenterAndExpand"
+            IsVisible="{Binding IsConnecting}"
+            Spacing="50"
+            VerticalOptions="CenterAndExpand">
+            <Label Style="{StaticResource MediumTextStyle}" Text="{xct:Translate Connecting}" />
+            <ActivityIndicator
+                HeightRequest="100"
+                IsRunning="True"
+                WidthRequest="100"
+                Color="White" />
+        </StackLayout>
+        <StackLayout IsVisible="{Binding IsConnecting, Converter={StaticResource InverseBool}}">
+            <StackLayout VerticalOptions="CenterAndExpand">
+                <Label
+                    Margin="10,0"
+                    IsVisible="{Binding IsConnected, Converter={StaticResource InverseBool}}"
+                    Style="{StaticResource MediumTextStyle}"                    
+                    Text="{Binding ReaderResult}" />
+                <Label
+                    Margin="10,0"
+                    IsVisible="{Binding IsConnected}"
+                    Style="{StaticResource MediumTextStyle}"
+                    Text="{xct:Translate Connected}" />
+            </StackLayout>
+            <StackLayout
+                HorizontalOptions="CenterAndExpand"
+                Orientation="Vertical"                
+                VerticalOptions="Start"
+                WidthRequest="250">
+                <CollectionView
+                    ItemSizingStrategy="MeasureFirstItem"
+                    BackgroundColor="Transparent"
+                    x:Name="AssignmentsCollectionView"
+                    HeightRequest="400"
+                    HorizontalOptions="Center"
+                    IsVisible="{Binding IsConnected, Converter={StaticResource InverseBool}}"
+                    ItemsSource="{Binding AvailableDevices}">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="10"/>
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="model:PlatformDevice">
+                            <Button
+                                Command="{Binding Source={x:Reference AssignmentsCollectionView}, Path=BindingContext.OnInstrumentSelected}" CommandParameter="{Binding}"
+                                Text="{Binding Name}"/>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                <Button
+                    Command="{Binding ContinueCommand}"
+                    HorizontalOptions="CenterAndExpand"
+                    IsVisible="{Binding IsConnected}"
+                    Text="{xct:Translate Continue}"
+                    WidthRequest="190" />
+                <Button
+                    Command="{Binding DisconnectCommand}"
+                    HorizontalOptions="CenterAndExpand"
+                    IsVisible="{Binding IsConnected}"
+                    Text="{xct:Translate Disconnect}"
+                    WidthRequest="190" />
+                <Button
+                    Margin="0,0,0,50"
+                    Command="{Binding CancelCommand}"
+                    HorizontalOptions="CenterAndExpand"
+                    Text="{xct:Translate Cancel}"
+                    WidthRequest="190" />
+            </StackLayout>
+            <ContentView VerticalOptions="End">
+                <views:StatusBarView />
+            </ContentView>
+        </StackLayout>
+    </Grid>
+</ContentPage>

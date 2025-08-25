@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentView
+    x:Class="PSExampleApp.Forms.Views.StatusBarView"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:PSExampleApp.Forms.Converters"
+    xmlns:viewmodels="clr-namespace:PSExampleApp.Forms.ViewModels"
+    xmlns:helpers="clr-namespace:PSExampleApp.Core.Helpers;assembly=PSExampleApp.Core"
+    xmlns:ffimageloadingsvg="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"    
+    x:DataType="viewmodels:StatusBarViewModel"
+    Visual="Material">
+
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <local:InverseBoolConverter x:Key="InverseBool" />
+        </ResourceDictionary>
+    </ContentView.Resources>
+
+    <ContentView.Content>
+        <Grid>
+            <Frame
+                Style="{StaticResource StatusBarFrame}"/>
+            <StackLayout HeightRequest="75" Orientation="Horizontal">
+                <StackLayout
+                    Padding="20,0,20,0"
+                    HorizontalOptions="FillAndExpand"
+                    Orientation="Horizontal"
+                    Spacing="15">
+                    <Image
+                        Margin="0,14,0,0"
+                        HeightRequest="30"
+                        HorizontalOptions="Start"
+                        IsAnimationPlaying="True"
+                        IsVisible="{Binding IsConnected, Converter={StaticResource InverseBool}}"
+                        Source="searchinganimation.gif"
+                        VerticalOptions="Start"
+                        WidthRequest="30" />
+                    <ffimageloadingsvg:SvgCachedImage
+                        HeightRequest="30"
+                        HorizontalOptions="Start"
+                        IsVisible="{Binding IsConnected}"
+                        Source="resource://PSExampleApp.Forms.Resources.bluetoothconnected.svg"
+                        WidthRequest="30" />
+                    <StackLayout HorizontalOptions="StartAndExpand" Orientation="Horizontal">
+                        <Label
+                            HorizontalOptions="Start"
+                            Style="{StaticResource MicroTextStyle}"
+                            Text="{Binding StatusText}"
+                            VerticalTextAlignment="Center" />
+                        <Image
+                            Margin="-5,0,0,10"
+                            HeightRequest="30"
+                            IsAnimationPlaying="True"
+                            IsVisible="{Binding IsConnected, Converter={StaticResource InverseBool}}"
+                            Source="dotsanimated.gif"
+                            VerticalOptions="CenterAndExpand"
+                            WidthRequest="30" />
+                    </StackLayout>
+                    <ffimageloadingsvg:SvgCachedImage
+                        Margin="0,0,5,0"
+                        helpers:TappedGestureAttached.Command="{Binding OpenDataCommand}"
+                        HeightRequest="30"
+                        HorizontalOptions="EndAndExpand"
+                        IsVisible="{Binding HasActiveMeasurement, Converter={StaticResource InverseBool}}"
+                        Source="resource://PSExampleApp.Forms.Resources.chart.svg"
+                        WidthRequest="30" />
+                    <ffimageloadingsvg:SvgCachedImage
+                        helpers:TappedGestureAttached.Command="{Binding OpenSettingsCommand}"
+                        HeightRequest="30"
+                        HorizontalOptions="End"
+                        Source="resource://PSExampleApp.Forms.Resources.cogwheel.svg"
+                        WidthRequest="30" />
+                </StackLayout>
+            </StackLayout>
+        </Grid>
+    </ContentView.Content>
+</ContentView>
