@@ -17,4 +17,4 @@ BioChip is a customized version of [PalmSens PSExampleApp](https://github.com/Pa
 ## Installation
 1. Clone this repository:
    ```bash
-   git clone https://github.com/<your-username>/BioChip.git
+   git clone https://github.com/mkh23/BioChip.git
