@@ -10,7 +10,7 @@ namespace PalmSens.Core.Simplified.XF.Application.Services
         public void OpenBluetoothSettings();
 
         Task<PermissionStatus> RequestBluetoothPermission();
-        Task<PermissionStatus> RequestStoragePermission();
+        //Task<PermissionStatus> RequestStoragePermission();
 
         Task<PermissionStatus> RequestPermission<T>() where T : Permissions.BasePermission, new();
     }

@@ -66,10 +66,10 @@ namespace PSExampleApp.Droid.Services
             return RequestPermission<BluetoothPermission>();
         }
 
-        public Task<PermissionStatus> RequestStoragePermission()
-        {
-            return RequestPermission<StorageWritePermission>();
-        }
+        //public Task<PermissionStatus> RequestStoragePermission()
+        //{
+        //    return RequestPermission<StorageWritePermission>();
+        //}
 
         public async Task<PermissionStatus> RequestPermission<T>() where T : Permissions.BasePermission, new()
         {
